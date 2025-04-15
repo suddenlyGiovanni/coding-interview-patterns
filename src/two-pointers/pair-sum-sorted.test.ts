@@ -1,22 +1,26 @@
 import { describe, expect, it } from 'vitest'
 
-type PairSumSortedStrategy = (nums: number[], target: number) => number[];
+
+type PairSumSortedStrategy = <Nums extends readonly number[]>(nums: Nums, target: number) => [left: keyof Nums, keyof Nums][];
 
 /**
+ * Brute force solution that involves checking all possible pairs;
+ * This is done with two nested loops:
+ * - an outer loop that traverse the array for the first element of the pair,
+ * - and an inner loop that traverses the rest of the array to find the second element.
  *
- * @param nums
- * @param target
+ * This approach has a time complexity of `O(n^2)` where n detonates the length of the array
  */
 const bruteForce: PairSumSortedStrategy = (nums, target) => {
+	let result: [number, number][] = []
 	for (let left = 0; left < nums.length; left++) {
 		for (let right = left + 1; right < nums.length; right++) {
 			if (nums[left] + nums[right] === target) {
-				return [left, right]
+				result.push([left, right])
 			}
 		}
 	}
-
-	return []
+	return result
 }
 
 /**
@@ -36,78 +40,92 @@ const bruteForce: PairSumSortedStrategy = (nums, target) => {
 const makePairSumSorted = (strategy: PairSumSortedStrategy) => (nums: number[], target: number) => strategy(nums, target)
 
 describe('pairSumSorted', () => {
-	const pairSumSorted = makePairSumSorted(bruteForce)
+	describe('test an empty array', () => {
+		const nums = []
+		const target = 0
+		const expectedOutput = []
 
-	it('should return indexes of pair that sums to target - example 1', () => {
-		/**
-		 * Input: nums = [-5, -2, 3, 4, 6], target = 7
-		 * Output: [2, 3]
-		 * Explanation: nums[2] + nums[3] = 3 + 4 = 7
-		 */
-		const nums = [-5, -2, 3, 4, 6]
-		const target = 7
-		const result = pairSumSorted(nums, target)
+		it('brute force', () => {
+			const pairSumSorted = makePairSumSorted(bruteForce)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
+		})
 
-		// Since the order doesn't matter, we need to check if the values at these indices sum to target
-		expect(result.length).toBe(2)
-		expect(nums[result[0]] + nums[result[1]]).toBe(target)
-
-		// For this specific example, we can also check for the expected indices
-		const expectedPairs = [[2, 3], [3, 2]] // Order doesn't matter
-		const resultPair = [result[0], result[1]].sort((a, b) => a - b)
-		const foundMatch = expectedPairs.some((pair) => pair[0] === resultPair[0] && pair[1] === resultPair[1])
-		expect(foundMatch).toBe(true)
+		it.todo('two pointers', () => {
+		})
 	})
 
-	it('should return indexes of pair that sums to target - example 2', () => {
-		/**
-		 * Input: nums = [1, 1, 1], target = 2
-		 * Output: [0, 1] or other valid combinations
-		 */
-		const nums = [1, 1, 1]
-		const target = 2
-		const result = pairSumSorted(nums, target)
+	describe('test an array with just one element', () => {
+		const nums = [1]
+		const target = 1
+		const expectedOutput = []
 
-		expect(result.length).toBe(2);
-		expect(nums[result[0]] + nums[result[1]]).toBe(target)
+		it('brute force', () => {
+			const pairSumSorted = makePairSumSorted(bruteForce)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
+		})
 
-		// All valid pairs: [0,1], [1,0], [0,2], [2,0], [1,2], [2,1]
-		// We just need to verify that the returned indices contain the value 1
-		expect(nums[result[0]]).toBe(1)
-		expect(nums[result[1]]).toBe(1)
+		it.todo('two pointers', () => {
+		})
 	})
 
-	it('should return empty array if no pair is found', () => {
-		const nums = [1, 2, 3, 4]
-		const target = 10
-		const result = pairSumSorted(nums, target)
-
-		expect(result).toEqual([])
-	})
-
-	it('should work with negative numbers and negative target', () => {
-		const nums = [-8, -6, -2, 0, 1, 3]
-		const target = -8
-		const result = pairSumSorted(nums, target)
-
-		expect(result.length).toBe(2)
-		expect(nums[result[0]] + nums[result[1]]).toBe(target)
-	})
-
-	it.skip('should work with an array of two elements that sum to target', () => {
-		const nums = [1, 9]
-		const target = 10
-		const result = pairSumSorted(nums, target)
-
-		expect(result).toEqual([0, 1])
-	})
-
-	it.skip('should work with duplicate values that can form multiple valid pairs', () => {
-		const nums = [1, 2, 2, 3, 3]
+	describe('test two-element array that contains a pair that sums to the target', () => {
+		const nums = [2, 4]
 		const target = 5
-		const result = pairSumSorted(nums, target)
+		const expectedOutput = []
 
-		expect(result.length).toBe(2)
-		expect(nums[result[0]] + nums[result[1]]).toBe(target)
+		it('brute force', () => {
+			const pairSumSorted = makePairSumSorted(bruteForce)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
+		})
+
+		it.todo('two pointers', () => {
+		})
 	})
+
+	describe('test an array with duplicate values', () => {
+		const nums = [2, 2, 3]
+		const target = 5
+		const expectedOutputs = [[0, 2], [1, 2]] as const
+
+		it('brute force', () => {
+			const pairSumSorted = makePairSumSorted(bruteForce)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutputs[0])
+			expect(results).toContainEqual(expectedOutputs[1])
+		})
+
+		it.todo('two pointers', () => {
+		})
+	})
+
+	describe('test if the algorithm works with negative number in the target pair', () => {
+		const nums = [-1, 2, 3]
+		const target = 2
+		const expectedOutput = [0, 2]
+
+		it('brute force', () => {
+			const pairSumSorted = makePairSumSorted(bruteForce)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutput)
+		})
+
+		it.todo('two pointers', () => {
+		})
+	})
+
+	describe('test if the algorithm works with both numbers of the target pair being negative', () => {
+		const nums = [-3, -2, -1]
+		const target = -5
+		const expectedOutput = [0, 1]
+
+		it('brute force', () => {
+			const pairSumSorted = makePairSumSorted(bruteForce)
+			const results = pairSumSorted(nums, target)
+			expect(pairSumSorted(nums, target)).toContainEqual(expectedOutput)
+		})
+
+		it.todo('two pointers', () => {
+		})
+	})
+
 })
