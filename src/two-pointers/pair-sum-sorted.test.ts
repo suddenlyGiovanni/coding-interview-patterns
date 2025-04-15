@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 
-type PairSumSortedStrategy = <Nums extends readonly number[]>(nums: Nums, target: number) => [left: keyof Nums, keyof Nums][];
+type PairSumSortedStrategy = <Nums extends readonly number[], Idx extends keyof Nums>(nums: Nums, target: number) => [left: Idx, Idx][];
 
 /**
  * Brute force solution that involves checking all possible pairs;
@@ -55,6 +55,34 @@ const twoPointers: PairSumSortedStrategy = (nums, target) => {
 	return result //?
 }
 
+const recursiveTwoPointers: PairSumSortedStrategy = (nums, target) => {
+	// base case: left pointer is greater than or equal to right pointer; no pair found; stop recursion
+
+	function findPairsWithTargetSum<Idx extends keyof typeof nums, LeftPointer extends Idx, RightPointer extends Idx>(leftPoiner: LeftPointer, rightPointer: RightPointer, pairs: [LeftPointer, RightPointer][]): [LeftPointer, RightPointer][] {
+		if (leftPoiner >= rightPointer) return pairs
+
+		const left = nums[leftPoiner]
+		const right = nums[rightPointer]
+		const sum = left + right
+
+		if (sum < target) {
+			return findPairsWithTargetSum(leftPoiner + 1, rightPointer, pairs)
+		}
+
+		if (sum > target) {
+			return findPairsWithTargetSum(leftPoiner, rightPointer - 1, pairs)
+		}
+
+		if (sum === target) {
+			return findPairsWithTargetSum(leftPoiner + 1, rightPointer, [...pairs, [leftPoiner, rightPointer]])
+		}
+
+	}
+
+
+	return findPairsWithTargetSum(0, nums.length - 1, [])
+}
+
 /**
  * Given an array of integers sorted in ascending order and a target value,
  * return the indexes of any pair of numbers in the array that sum to the target.
@@ -86,6 +114,11 @@ describe('pairSumSorted', () => {
 			const pairSumSorted = makePairSumSorted(twoPointers)
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
+
+		it('recursive two pointers', () => {
+			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
+		})
 	})
 
 	describe('test an array with just one element', () => {
@@ -102,6 +135,10 @@ describe('pairSumSorted', () => {
 			const pairSumSorted = makePairSumSorted(twoPointers)
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
+		it('recursive two pointers', () => {
+			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
+		})
 	})
 
 	describe('test two-element array that contains a pair that sums to the target', () => {
@@ -116,6 +153,11 @@ describe('pairSumSorted', () => {
 
 		it('two pointers', () => {
 			const pairSumSorted = makePairSumSorted(twoPointers)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
+		})
+
+		it('recursive two pointers', () => {
+			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 	})
@@ -138,6 +180,13 @@ describe('pairSumSorted', () => {
 			expect(results).toContainEqual(expectedOutputs[0])
 			expect(results).toContainEqual(expectedOutputs[1])
 		})
+
+		it('recursive two pointers', () => {
+			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutputs[0])
+			expect(results).toContainEqual(expectedOutputs[1])
+		})
 	})
 
 	describe('test if the algorithm works with negative number in the target pair', () => {
@@ -156,6 +205,12 @@ describe('pairSumSorted', () => {
 			const results = pairSumSorted(nums, target)
 			expect(results).toContainEqual(expectedOutput)
 		})
+
+		it('recursive two pointers', () => {
+			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutput)
+		})
 	})
 
 	describe('test if the algorithm works with both numbers of the target pair being negative', () => {
@@ -171,6 +226,12 @@ describe('pairSumSorted', () => {
 
 		it('two pointers', () => {
 			const pairSumSorted = makePairSumSorted(twoPointers)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutput)
+		})
+
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
 			const results = pairSumSorted(nums, target)
 			expect(results).toContainEqual(expectedOutput)
 		})
