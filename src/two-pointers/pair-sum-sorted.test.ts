@@ -24,6 +24,38 @@ const bruteForce: PairSumSortedStrategy = (nums, target) => {
 }
 
 /**
+ * Given an array of integers sorted in ascending order and a target value;
+ * We can find the indexes of any pair of numbers in the array that sum to the target value with the two pointers technique.
+ *
+ * For any pair of valuse, of left and right:
+ * - if the sum is less than the target, increment left, aiming to increas the sum toward the target value;
+ * - if the sum is grater that the target, decrement right aiming to decreas the sum toward the target value;
+ * - if the sum is equal to the target, we have found a pair, so we can store the indexes and increment left;
+ */
+const twoPointers: PairSumSortedStrategy = (nums, target) => {
+	let leftPointer = 0
+	let rightPointer = nums.length - 1
+	const result: [number, number][] = []
+
+	while (leftPointer < rightPointer) {
+		const left = nums[leftPointer]
+		const right = nums[rightPointer]
+		const sum = left + right
+		if (sum < target) {
+			leftPointer++
+		} else if (sum > target) {
+			rightPointer--
+		} else if (sum === target) {
+			result.push([leftPointer, rightPointer])
+			leftPointer++
+		}
+	}
+
+
+	return result //?
+}
+
+/**
  * Given an array of integers sorted in ascending order and a target value,
  * return the indexes of any pair of numbers in the array that sum to the target.
  * The order of the indexes in the result doesn't matter.
@@ -50,7 +82,9 @@ describe('pairSumSorted', () => {
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 
-		it.todo('two pointers', () => {
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(twoPointers)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 	})
 
@@ -64,7 +98,9 @@ describe('pairSumSorted', () => {
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 
-		it.todo('two pointers', () => {
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(twoPointers)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 	})
 
@@ -78,7 +114,9 @@ describe('pairSumSorted', () => {
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 
-		it.todo('two pointers', () => {
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(twoPointers)
+			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 	})
 
@@ -94,7 +132,11 @@ describe('pairSumSorted', () => {
 			expect(results).toContainEqual(expectedOutputs[1])
 		})
 
-		it.todo('two pointers', () => {
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(twoPointers)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutputs[0])
+			expect(results).toContainEqual(expectedOutputs[1])
 		})
 	})
 
@@ -109,7 +151,10 @@ describe('pairSumSorted', () => {
 			expect(results).toContainEqual(expectedOutput)
 		})
 
-		it.todo('two pointers', () => {
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(twoPointers)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutput)
 		})
 	})
 
@@ -121,10 +166,13 @@ describe('pairSumSorted', () => {
 		it('brute force', () => {
 			const pairSumSorted = makePairSumSorted(bruteForce)
 			const results = pairSumSorted(nums, target)
-			expect(pairSumSorted(nums, target)).toContainEqual(expectedOutput)
+			expect(results).toContainEqual(expectedOutput)
 		})
 
-		it.todo('two pointers', () => {
+		it('two pointers', () => {
+			const pairSumSorted = makePairSumSorted(twoPointers)
+			const results = pairSumSorted(nums, target)
+			expect(results).toContainEqual(expectedOutput)
 		})
 	})
 
