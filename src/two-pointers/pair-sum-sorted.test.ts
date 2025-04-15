@@ -100,23 +100,15 @@ const recursiveTwoPointers: PairSumSortedStrategy = (nums, target) => {
 const makePairSumSorted = (strategy: PairSumSortedStrategy) => (nums: number[], target: number) => strategy(nums, target)
 
 describe('pairSumSorted', () => {
+
+	const strategies = [bruteForce, twoPointers, recursiveTwoPointers] as const
 	describe('test an empty array', () => {
 		const nums = []
 		const target = 0
 		const expectedOutput = []
 
-		it('brute force', () => {
-			const pairSumSorted = makePairSumSorted(bruteForce)
-			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
-		})
-
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(twoPointers)
-			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
-		})
-
-		it('recursive two pointers', () => {
-			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+		it.for(strategies)('with %O strategy', (strategy) => {
+			const pairSumSorted = makePairSumSorted(strategy)
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 	})
@@ -126,17 +118,8 @@ describe('pairSumSorted', () => {
 		const target = 1
 		const expectedOutput = []
 
-		it('brute force', () => {
-			const pairSumSorted = makePairSumSorted(bruteForce)
-			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
-		})
-
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(twoPointers)
-			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
-		})
-		it('recursive two pointers', () => {
-			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+		it.for(strategies)('with %O strategy', (strategy) => {
+			const pairSumSorted = makePairSumSorted(strategy)
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 	})
@@ -146,20 +129,11 @@ describe('pairSumSorted', () => {
 		const target = 5
 		const expectedOutput = []
 
-		it('brute force', () => {
-			const pairSumSorted = makePairSumSorted(bruteForce)
+		it.for(strategies)('with %O strategy', (strategy) => {
+			const pairSumSorted = makePairSumSorted(strategy)
 			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
 		})
 
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(twoPointers)
-			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
-		})
-
-		it('recursive two pointers', () => {
-			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
-			expect(pairSumSorted(nums, target)).toEqual(expectedOutput)
-		})
 	})
 
 	describe('test an array with duplicate values', () => {
@@ -167,22 +141,8 @@ describe('pairSumSorted', () => {
 		const target = 5
 		const expectedOutputs = [[0, 2], [1, 2]] as const
 
-		it('brute force', () => {
-			const pairSumSorted = makePairSumSorted(bruteForce)
-			const results = pairSumSorted(nums, target)
-			expect(results).toContainEqual(expectedOutputs[0])
-			expect(results).toContainEqual(expectedOutputs[1])
-		})
-
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(twoPointers)
-			const results = pairSumSorted(nums, target)
-			expect(results).toContainEqual(expectedOutputs[0])
-			expect(results).toContainEqual(expectedOutputs[1])
-		})
-
-		it('recursive two pointers', () => {
-			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+		it.for(strategies)('with %O strategy', (strategy) => {
+			const pairSumSorted = makePairSumSorted(strategy)
 			const results = pairSumSorted(nums, target)
 			expect(results).toContainEqual(expectedOutputs[0])
 			expect(results).toContainEqual(expectedOutputs[1])
@@ -194,20 +154,8 @@ describe('pairSumSorted', () => {
 		const target = 2
 		const expectedOutput = [0, 2]
 
-		it('brute force', () => {
-			const pairSumSorted = makePairSumSorted(bruteForce)
-			const results = pairSumSorted(nums, target)
-			expect(results).toContainEqual(expectedOutput)
-		})
-
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(twoPointers)
-			const results = pairSumSorted(nums, target)
-			expect(results).toContainEqual(expectedOutput)
-		})
-
-		it('recursive two pointers', () => {
-			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+		it.for(strategies)('with %O strategy', (strategy) => {
+			const pairSumSorted = makePairSumSorted(strategy)
 			const results = pairSumSorted(nums, target)
 			expect(results).toContainEqual(expectedOutput)
 		})
@@ -218,20 +166,8 @@ describe('pairSumSorted', () => {
 		const target = -5
 		const expectedOutput = [0, 1]
 
-		it('brute force', () => {
-			const pairSumSorted = makePairSumSorted(bruteForce)
-			const results = pairSumSorted(nums, target)
-			expect(results).toContainEqual(expectedOutput)
-		})
-
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(twoPointers)
-			const results = pairSumSorted(nums, target)
-			expect(results).toContainEqual(expectedOutput)
-		})
-
-		it('two pointers', () => {
-			const pairSumSorted = makePairSumSorted(recursiveTwoPointers)
+		it.for(strategies)('with %O strategy', (strategy) => {
+			const pairSumSorted = makePairSumSorted(strategy)
 			const results = pairSumSorted(nums, target)
 			expect(results).toContainEqual(expectedOutput)
 		})
