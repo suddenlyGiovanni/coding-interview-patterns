@@ -1,11 +1,16 @@
 {
   "name": "coding-interview-patterns",
+  "type": "module",
   "scripts": {
 	"test": "vitest"
   },
   "packageManager": "pnpm@9.15.6+sha512.139cab068fdf0b751268179ac5f909b5be72afb4a75c513d1905d151befc8977b593d3cf8671ed83d4d6637c5c94b98ffbce108125de4a5a27a31233601a99de",
   "devDependencies": {
-    "vitest": "^3.1.1"
+	"@tsconfig/node-ts": "^23.6.1",
+	"@tsconfig/node23": "^23.0.1",
+	"@tsconfig/strictest": "^2.0.5",
+	"typescript": "^5.8.3",
+	"vitest": "^3.1.1"
   },
   "engines": {
 	"node": ">=23.6"
