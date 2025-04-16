@@ -1,5 +1,5 @@
-import { Data, MutableHashSet, pipe } from 'effect'
-import { describe, expect, it } from 'vitest'
+import { Data, MutableHashSet, Number } from 'effect'
+import { describe, expect, it }                      from 'vitest'
 
 type Triplet = [number, number, number]
 
@@ -20,8 +20,8 @@ type Triplet = [number, number, number]
 type TripletSumStrategy = (nums: readonly number[]) => Triplet[]
 
 const makeTripletSum =
-	(tripletSumStrategy: TripletSumStrategy) => (nums: readonly number[]) =>
-		tripletSumStrategy(nums)
+		(tripletSumStrategy: TripletSumStrategy) => (nums: readonly number[]) =>
+				tripletSumStrategy(nums)
 
 const bruteForce: TripletSumStrategy = (nums) => {
 	const triplets = MutableHashSet.empty<Triplet>()
@@ -37,7 +37,7 @@ const bruteForce: TripletSumStrategy = (nums) => {
 				if (a !== undefined && b !== undefined && c !== undefined) {
 					if (a + b + c === 0) {
 						const triplet = Data.tuple(
-							...(([a, b, c] as const).toSorted() as unknown as Triplet),
+								...(([a, b, c] as const).toSorted() as unknown as Triplet),
 						)
 						MutableHashSet.add(triplets, triplet)
 					}
@@ -49,8 +49,91 @@ const bruteForce: TripletSumStrategy = (nums) => {
 	return Array.from(triplets)
 }
 
+const twoPointers: TripletSumStrategy = (nums) => {
+	/**
+	 * for any triplet (a, b, c) if we fix a, we can focus on finding a pair (b, c) such that
+	 * (a + b + c = 0) => ( b + c = -a )
+	 *
+	 * then we can use the find pair sum sorted algorithm to find the pair (b, c);
+	 * the only precondition is that the array must be sorted.
+	 */
+	const sorted = nums.toSorted(Number.Order)
+
+	const lastIndex = sorted.length - 1
+	const triplets = MutableHashSet.empty<Triplet>()
+
+	function pairSumSorted(
+			start: number,
+			target: number,
+	) {
+
+		const pairs = MutableHashSet.empty<readonly [number, number]>()
+
+		let leftPointer = start
+		let rightPointer = lastIndex
+
+		while (leftPointer < rightPointer) {
+			const left = sorted.at(leftPointer)
+			const right = sorted.at(rightPointer)
+
+			if (left === undefined || right === undefined) {
+				break
+			}
+
+			const sum = Number.sum(left, right)
+
+			if (sum < target) {
+				leftPointer += 1
+			} else if (sum > target) {
+				rightPointer -= 1
+			} else if (sum === target) {
+				MutableHashSet.add(pairs, Data.tuple(left, right))
+				leftPointer += 1
+				while (leftPointer < rightPointer && sorted.at(leftPointer) === sorted.at(leftPointer - 1)) {
+					leftPointer += 1
+				}
+			}
+		}
+		return pairs
+	}
+
+
+	for (let i = 0; i < lastIndex; i++) {
+		const a = sorted.at(i)!
+
+		/**
+		 * Observation:
+		 * Triplet (a, b, c) that sums to 0 can not be formed using positive numbers alone;
+		 * Therefore, we can stop trying to find triplets once we reach a positive `a` value since this implies that also `b` and `c` are positive;
+		 */
+		if (a > 0) {
+			break
+
+		}
+
+		/**
+		 * to avoid duplicates, skip `a` if it is the same value as the previous one
+		 */
+		if (i > 0 && a === sorted.at(i - 1)) {
+			continue
+		}
+
+		/**
+		 * find all the pairs that sum to a target of `-a`
+		 */
+		const pairs = pairSumSorted(i + 1, Number.multiply(a, -1))
+
+		for (const pair of pairs) {
+			const triplet = Data.tuple(...([a, ...pair].toSorted()))
+			MutableHashSet.add(triplets, triplet)
+		}
+	}
+
+	return Array.from(triplets)
+}
+
 describe('tripletSum', () => {
-	const strategies = [bruteForce] as const
+	const strategies = [bruteForce, twoPointers] as const
 
 	describe('test an empty array', () => {
 		const nums: number[] = []
@@ -84,7 +167,7 @@ describe('tripletSum', () => {
 
 	describe('test an array where all three of its values are the same', () => {
 		const nums: number[] = [0, 0, 0]
-		const expectedOutput: Triplet = [[0, 0, 0]]
+		const expectedOutput: Triplet[] = [[0, 0, 0]]
 
 		it.for(strategies)('with %O strategy', (strategy) => {
 			const tripletSum = makeTripletSum(strategy)
