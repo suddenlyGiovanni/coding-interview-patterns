@@ -7,7 +7,15 @@
   },
   "files": {
 	"ignoreUnknown": false,
-	"ignore": []
+	"ignore": [],
+	"include": [
+	  "**/*.js",
+	  "**/*.jsx",
+	  "**/*.ts",
+	  "**/*.tsx",
+	  "**/*.json",
+	  "**/*.md"
+	]
   },
   "formatter": {
 	"enabled": true,
