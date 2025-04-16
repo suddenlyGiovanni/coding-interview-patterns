@@ -27,10 +27,7 @@
   "linter": {
 	"enabled": true,
 	"rules": {
-	  "recommended": true,
-	  "style": {
-		"noNonNullAssertion": false
-	  }
+	  "recommended": true
 	}
   },
   "javascript": {
