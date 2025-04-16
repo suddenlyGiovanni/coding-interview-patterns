@@ -52,7 +52,7 @@ const twoPointers: PairSumSortedStrategy = (nums, target) => {
 	}
 
 
-	return result //?
+	return result
 }
 
 const recursiveTwoPointers: PairSumSortedStrategy = (nums, target) => {
