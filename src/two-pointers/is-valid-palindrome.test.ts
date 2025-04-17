@@ -79,8 +79,54 @@ const twoPointers: IsValidPalindromeStrategy = (inputString) => {
 	return true
 }
 
+const recursive: IsValidPalindromeStrategy = (inputString) => {
+	/**
+	 * base base case: if left and right do not match return false
+	 * recursive case: if left and right match and string not exausted, recurse, else return true
+	 */
+
+	const alphanumericPattern = RegExp(/[a-zA-Z0-9]/)
+
+	function checkPalindrome(leftPointer: number, rightPointer: number): boolean {
+		// 1. Skip non-alphanumeric characters from the left
+		while (
+			leftPointer < rightPointer &&
+			!alphanumericPattern.test(inputString[leftPointer]!)
+		) {
+			leftPointer += 1
+		}
+
+		// 2. Skip non-alphanumeric characters from the right
+		while (
+			leftPointer < rightPointer &&
+			!alphanumericPattern.test(inputString[rightPointer]!)
+		) {
+			rightPointer -= 1
+		}
+
+		// 3. Base Case: If pointers meet or cross, it's a palindrome
+		if (leftPointer >= rightPointer) {
+			return true
+		}
+
+		// 4. Compare the characters at the pointers
+		// Note: Palindrome checks are often case-insensitive. If needed, convert to lower case:
+		// if (inputString[left]!.toLowerCase() !== inputString[right]!.toLowerCase()) {
+		if (inputString[leftPointer] !== inputString[rightPointer]) {
+			// Base Case: Mismatch found
+			return false
+		}
+
+		// 5. Recursive Step: Check the inner substring
+		return checkPalindrome(leftPointer + 1, rightPointer - 1)
+	}
+
+	// 5. Recursive Step: Check the inner substring
+	return checkPalindrome(0, inputString.length - 1)
+}
+
 describe('isValidPalindrome', () => {
-	const strategies: IsValidPalindromeStrategy[] = [twoPointers]
+	const strategies: IsValidPalindromeStrategy[] = [twoPointers, recursive]
 
 	describe.for([{ input: '', output: true }])(
 		'Tests an empty string',
