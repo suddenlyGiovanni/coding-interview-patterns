@@ -88,33 +88,27 @@ const recursive: IsValidPalindromeStrategy = (inputString) => {
 	const alphanumericPattern = RegExp(/[a-zA-Z0-9]/)
 
 	function checkPalindrome(leftPointer: number, rightPointer: number): boolean {
-		// 1. Skip non-alphanumeric characters from the left
-		while (
-			leftPointer < rightPointer &&
-			!alphanumericPattern.test(inputString[leftPointer]!)
-		) {
-			leftPointer += 1
-		}
-
-		// 2. Skip non-alphanumeric characters from the right
-		while (
-			leftPointer < rightPointer &&
-			!alphanumericPattern.test(inputString[rightPointer]!)
-		) {
-			rightPointer -= 1
-		}
-
-		// 3. Base Case: If pointers meet or cross, it's a palindrome
+		// 1. Base Case: Pointers meet or cross -> Palindrome confirmed so far
 		if (leftPointer >= rightPointer) {
 			return true
 		}
 
-		// 4. Compare the characters at the pointers
-		// Note: Palindrome checks are often case-insensitive. If needed, convert to lower case:
-		// if (inputString[left]!.toLowerCase() !== inputString[right]!.toLowerCase()) {
-		if (inputString[leftPointer] !== inputString[rightPointer]) {
-			// Base Case: Mismatch found
-			return false
+		const leftChar = inputString.at(leftPointer)!
+		const rightChar = inputString.at(rightPointer)!
+
+		// 2. Recursive Skip Left: If left char is non-alphanumeric, skip it
+		if (!alphanumericPattern.test(leftChar)) {
+			return checkPalindrome(leftPointer + 1, rightPointer)
+		}
+
+		// 3. Recursive Skip Right: If right char is non-alphanumeric, skip it
+		if (!alphanumericPattern.test(rightChar)) {
+			return checkPalindrome(leftPointer, rightPointer - 1)
+		}
+
+		// 4. Both are alphanumeric, compare them (case-insensitive)
+		if (leftChar.toLowerCase() !== rightChar.toLowerCase()) {
+			return false // Mismatch
 		}
 
 		// 5. Recursive Step: Check the inner substring
