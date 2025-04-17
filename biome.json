@@ -1,39 +1,65 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": {
-	"enabled": false,
-	"clientKind": "git",
-	"useIgnoreFile": false
-  },
-  "files": {
-	"ignoreUnknown": false,
-	"ignore": [],
-	"include": [
-	  "**/*.js",
-	  "**/*.jsx",
-	  "**/*.ts",
-	  "**/*.tsx",
-	  "**/*.json",
-	  "**/*.md"
-	]
-  },
-  "formatter": {
-	"enabled": true,
-	"indentStyle": "tab"
-  },
-  "organizeImports": {
-	"enabled": true
-  },
-  "linter": {
-	"enabled": true,
-	"rules": {
-	  "recommended": true
-	}
-  },
-  "javascript": {
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"includes": [
+			"**/*.js",
+			"**/*.jsx",
+			"**/*.ts",
+			"**/*.tsx",
+			"**/*.json",
+			"**/*.md"
+		]
+	},
 	"formatter": {
-	  "quoteStyle": "single",
-	  "semicolons": "asNeeded"
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"style": {
+				"useLiteralEnumMembers": "error",
+				"noCommaOperator": "error",
+				"useNodejsImportProtocol": "error",
+				"useAsConstAssertion": "error",
+				"useNumericLiterals": "error",
+				"useEnumInitializers": "error",
+				"useSelfClosingElements": "error",
+				"useConst": "error",
+				"useSingleVarDeclarator": "error",
+				"noUnusedTemplateLiteral": "error",
+				"useNumberNamespace": "error",
+				"noInferrableTypes": "error",
+				"useExponentiationOperator": "error",
+				"useTemplate": "error",
+				"noParameterAssign": "error",
+				"noNonNullAssertion": "info",
+				"useDefaultParameterLast": "error",
+				"noArguments": "error",
+				"useImportType": "error",
+				"useExportType": "error",
+				"noUselessElse": "error",
+				"useShorthandFunctionType": "error"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "single",
+			"semicolons": "asNeeded"
+		}
 	}
-  }
 }
