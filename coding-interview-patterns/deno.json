@@ -1,0 +1,13 @@
+{
+	"tasks": {
+		"test": "deno run -A npm:vitest"
+	},
+	"imports": {
+		"effect": "npm:effect@^3.17.13"
+	},
+	"permissions": {
+		"default": {
+			"env": true
+		}
+	}
+}

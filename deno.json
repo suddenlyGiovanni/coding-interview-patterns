@@ -1,0 +1,32 @@
+{
+	"imports": {
+		"effect": "npm:effect@^3.17.13",
+		"vitest": "npm:vitest@^3.2.4"
+	},
+	"nodeModulesDir": "auto",
+	"workspace": [
+		"./coding-interview-patterns",
+		"./domain-modeling-made-functional"
+	],
+	"compilerOptions": {
+		"strict": true,
+		"allowUnusedLabels": false,
+		"allowUnreachableCode": false,
+		"exactOptionalPropertyTypes": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitOverride": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"skipLibCheck": true,
+		"erasableSyntaxOnly": true,
+		"lib": [
+			"deno.window"
+		],
+		"noErrorTruncation": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true
+	}
+}
