@@ -1,7 +1,7 @@
 {
 	"imports": {
 		"effect": "npm:effect@^3.17.13",
-		"vitest": "npm:vitest@^3.2.4"
+		"vitest": "npm:vitest@^5.0.0"
 	},
 	"nodeModulesDir": "auto",
 	"workspace": [
